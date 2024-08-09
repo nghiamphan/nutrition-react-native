@@ -1,20 +1,39 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { StatusBar } from 'expo-status-bar'
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+import ResultModal from './components/ResultModal'
+import ScanScreen from './components/ScanScreen'
+
+const Stack = createNativeStackNavigator()
+
+export default App = () => {
+    return (
+        <>
+            <StatusBar style="auto" />
+            <NavigationContainer>
+                <Stack.Navigator>
+                    <Stack.Group>
+                        <Stack.Screen
+                            name="ScanScreen"
+                            component={ScanScreen}
+                            options={{
+                                title: 'Scan  Product Barcode',
+                            }}
+                        />
+                    </Stack.Group>
+
+                    <Stack.Group screenOptions={{ presentation: 'modal' }}>
+                        <Stack.Screen
+                            name="ResultModal"
+                            component={ResultModal}
+                            options={{
+                                title: 'Result',
+                            }}
+                        />
+                    </Stack.Group>
+                </Stack.Navigator>
+            </NavigationContainer>
+        </>
+    )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
