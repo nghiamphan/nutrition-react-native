@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import { Camera, CameraView } from 'expo-camera'
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { Alert, StyleSheet, View } from 'react-native'
 import { Button, Snackbar, Text } from 'react-native-paper'
 
 import { fetchProduct } from '../services/product'
@@ -74,7 +74,9 @@ export default ScanScreen = () => {
 
             navigation.navigate('ResultModal', { product: response })
         } catch (error) {
-            alert(error, data)
+            if (error.response.status === 404) {
+                Alert.alert('Error', error.response.data.error)
+            }
         }
     }
 
