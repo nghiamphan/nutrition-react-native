@@ -211,7 +211,7 @@ export default ResultModal = ({ route }) => {
     return (
         <ScrollView>
             <View style={{ flexDirection: 'row', margin: 10, marginBottom: 0 }}>
-                <Image source={{ uri: image }} style={styles.image} resizeMode="contain" />
+                <Image source={{ uri: image ? image : null }} style={styles.image} resizeMode="contain" />
 
                 <View>
                     <Text variant="headlineSmall" style={{ fontWeight: 'bold', width: '99%' }}>
@@ -231,14 +231,16 @@ export default ResultModal = ({ route }) => {
             </View>
 
             <View style={{ margin: 20 }}>
-                <View style={styles.horizontalSpaceBetween}>
-                    <Text variant="titleLarge" style={{ fontWeight: 'bold' }}>
-                        Negatives
-                    </Text>
-                    <Text variant="labelMedium" style={{ color: 'gray' }}>
-                        per 100g
-                    </Text>
-                </View>
+                {negativeComponentsToDisplay.length > 0 && (
+                    <View style={styles.horizontalSpaceBetween}>
+                        <Text variant="titleLarge" style={{ fontWeight: 'bold' }}>
+                            Negatives
+                        </Text>
+                        <Text variant="labelMedium" style={{ color: 'gray' }}>
+                            per 100g
+                        </Text>
+                    </View>
+                )}
 
                 {/* <Text>Additives</Text>
                 <Text>{additives}</Text> */}
@@ -254,14 +256,16 @@ export default ResultModal = ({ route }) => {
                     ))}
                 </View>
 
-                <View style={[styles.horizontalSpaceBetween, { marginTop: 20 }]}>
-                    <Text variant="titleLarge" style={{ fontWeight: 'bold' }}>
-                        Positives
-                    </Text>
-                    <Text variant="labelMedium" style={{ color: 'gray' }}>
-                        per 100g
-                    </Text>
-                </View>
+                {positiveComponentsToDisplay.length > 0 && (
+                    <View style={[styles.horizontalSpaceBetween, { marginTop: 20 }]}>
+                        <Text variant="titleLarge" style={{ fontWeight: 'bold' }}>
+                            Positives
+                        </Text>
+                        <Text variant="labelMedium" style={{ color: 'gray' }}>
+                            per 100g
+                        </Text>
+                    </View>
+                )}
 
                 <View style={styles.vertical}>
                     {positiveComponentsToDisplay.map((component, index) => (
