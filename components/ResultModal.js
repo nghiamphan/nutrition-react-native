@@ -214,10 +214,10 @@ export default ResultModal = ({ route }) => {
                 <Image source={{ uri: image }} style={styles.image} resizeMode="contain" />
 
                 <View>
-                    <Text variant="headlineSmall" style={{ fontWeight: 'bold' }}>
+                    <Text variant="headlineSmall" style={{ fontWeight: 'bold', width: '99%' }}>
                         {name}
                     </Text>
-                    <Text variant="labelLarge" style={{ color: 'gray' }}>
+                    <Text variant="labelLarge" style={{ color: 'gray', width: '99%' }}>
                         {brand}
                     </Text>
 
@@ -302,12 +302,14 @@ const styles = StyleSheet.create({
     horizontalSpaceBetween: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center',
         marginTop: 5,
         marginEnd: 10,
     },
     image: {
-        width: 150,
+        width: 120,
         height: undefined,
         aspectRatio: 1,
+        marginRight: 10,
     },
 })
