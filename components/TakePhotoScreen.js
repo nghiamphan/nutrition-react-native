@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { Camera, CameraView } from 'expo-camera'
 import React, { useEffect, useRef, useState } from 'react'
 import { Alert, Image, StyleSheet, View } from 'react-native'
@@ -14,6 +14,7 @@ export default TakePhotoScreen = () => {
     const cameraRef = useRef(null)
     const [photo, setPhoto] = useState(null)
 
+    const isFocused = useIsFocused()
     const navigation = useNavigation()
 
     const getCameraPermission = async () => {
@@ -85,7 +86,7 @@ export default TakePhotoScreen = () => {
 
     return (
         <View style={{ flex: 1 }}>
-            <CameraView ref={cameraRef} style={styles.camera} />
+            {isFocused && <CameraView ref={cameraRef} style={styles.camera} />}
 
             <View style={styles.bottomContainer}>
                 <Image source={{ uri: photo ? photo.uri : null }} style={styles.previewImage} />

@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { Camera, CameraView } from 'expo-camera'
 import React, { useEffect, useState } from 'react'
 import { Alert, StyleSheet, View } from 'react-native'
@@ -13,6 +13,7 @@ export default ScanScreen = () => {
     )
     const [scanned, setScanned] = useState(false)
 
+    const isFocused = useIsFocused()
     const navigation = useNavigation()
 
     const getCameraPermission = async () => {
@@ -82,13 +83,15 @@ export default ScanScreen = () => {
 
     return (
         <View style={{ flex: 1 }}>
-            <CameraView
-                onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
-                barcodeScannerSettings={{
-                    barcodeTypes: ['upc_a'],
-                }}
-                style={StyleSheet.absoluteFillObject}
-            />
+            {isFocused && (
+                <CameraView
+                    onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+                    barcodeScannerSettings={{
+                        barcodeTypes: ['upc_a'],
+                    }}
+                    style={StyleSheet.absoluteFillObject}
+                />
+            )}
             <Snackbar
                 visible={scanned}
                 onDismiss={() => setScanned(false)}
