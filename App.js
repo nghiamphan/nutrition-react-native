@@ -1,11 +1,20 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { configureStore } from '@reduxjs/toolkit'
 import { StatusBar } from 'expo-status-bar'
+import { Provider } from 'react-redux'
 
 import ResultModal from './components/ResultModal'
 import ScanScreen from './components/ScanScreen'
 import TakePhotoScreen from './components/TakePhotoScreen'
+import cameraPermissionReducer from './reducers/cameraPermissionReducer'
+
+const store = configureStore({
+    reducer: {
+        cameraPermission: cameraPermissionReducer,
+    },
+})
 
 const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -33,7 +42,7 @@ const TabNavigator = () => {
 
 export default App = () => {
     return (
-        <>
+        <Provider store={store}>
             <StatusBar style="auto" />
             <NavigationContainer>
                 <Stack.Navigator>
@@ -49,6 +58,6 @@ export default App = () => {
                     </Stack.Group>
                 </Stack.Navigator>
             </NavigationContainer>
-        </>
+        </Provider>
     )
 }

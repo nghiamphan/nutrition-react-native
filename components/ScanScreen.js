@@ -1,30 +1,20 @@
 import { useIsFocused, useNavigation } from '@react-navigation/native'
-import { Camera, CameraView } from 'expo-camera'
+import { CameraView } from 'expo-camera'
 import React, { useEffect, useState } from 'react'
 import { Alert, StyleSheet, View } from 'react-native'
-import { Button, Snackbar, Text } from 'react-native-paper'
+import { Snackbar } from 'react-native-paper'
+import { useSelector } from 'react-redux'
 
 import { fetchProduct } from '../services/product'
+import AskCameraPermission from './AskCameraPermission'
 
 export default ScanScreen = () => {
-    const [cameraPermission, setCameraPermission] = useState(null)
-    const [cameraPermSnackbarVisible, setCameraPermSnackbarVisible] = useState(
-        cameraPermission === 'denied'
-    )
+    const cameraPermission = useSelector((state) => state.cameraPermission)
+
     const [scanned, setScanned] = useState(false)
 
     const isFocused = useIsFocused()
     const navigation = useNavigation()
-
-    const getCameraPermission = async () => {
-        const { status } = await Camera.requestCameraPermissionsAsync()
-        setCameraPermission(status)
-        setCameraPermSnackbarVisible(status === 'denied')
-    }
-
-    useEffect(() => {
-        getCameraPermission()
-    }, [])
 
     useEffect(() => {
         const dismissResultModal = navigation.addListener('focus', () => {
@@ -34,38 +24,8 @@ export default ScanScreen = () => {
         dismissResultModal
     }, [navigation])
 
-    if (cameraPermission === null) {
-        return (
-            <View style={styles.row}>
-                <Text variant="titleMedium">Requesting for camera permission</Text>
-            </View>
-        )
-    }
-
-    if (cameraPermission === 'denied') {
-        return (
-            <View style={styles.column}>
-                <Text variant="titleMedium">No access to camera</Text>
-                <Button
-                    mode="contained"
-                    icon="camera"
-                    onPress={getCameraPermission}
-                    style={{ marginTop: 20 }}
-                >
-                    Allow Camera Access
-                </Button>
-                <Snackbar
-                    visible={cameraPermSnackbarVisible}
-                    onDismiss={() => setCameraPermSnackbarVisible(false)}
-                    action={{
-                        label: 'Dismiss',
-                        onPress: () => {},
-                    }}
-                >
-                    Make sure the setting app allows this app to use camera
-                </Snackbar>
-            </View>
-        )
+    if (cameraPermission === 'denied' || cameraPermission === null) {
+        return <AskCameraPermission />
     }
 
     const handleBarCodeScanned = async ({ type, data }) => {
@@ -105,17 +65,3 @@ export default ScanScreen = () => {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    column: {
-        flex: 1,
-        flexDirection: 'column',
-        alignItems: 'center',
-        margin: 20,
-    },
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        margin: 20,
-    },
-})
