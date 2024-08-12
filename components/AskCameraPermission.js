@@ -1,20 +1,19 @@
-import { Camera } from 'expo-camera'
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Button, Snackbar, Text } from 'react-native-paper'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { setCameraPermission } from '../reducers/cameraPermissionReducer'
 
 export default AskCameraPermission = ({ permissionAlert }) => {
     const dispatch = useDispatch()
+    const cameraPermission = useSelector((state) => state.cameraPermission)
     const [cameraPermSnackbarVisible, setCameraPermSnackbarVisible] = useState(false)
 
-    const getCameraPermission = async (permissionAlert = true) => {
+    const getCameraPermission = (permissionAlert = true) => {
         if (permissionAlert) {
-            const { status } = await Camera.requestCameraPermissionsAsync()
-            dispatch(setCameraPermission(status))
-            setCameraPermSnackbarVisible(status === 'denied')
+            dispatch(setCameraPermission())
+            setCameraPermSnackbarVisible(cameraPermission === 'denied')
         }
     }
 

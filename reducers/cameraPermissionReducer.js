@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { Camera } from 'expo-camera'
 
 const cameraPermissionReducer = createSlice({
     name: 'cameraPermission',
@@ -8,9 +9,10 @@ const cameraPermissionReducer = createSlice({
     },
 })
 
-export const setCameraPermission = (permission) => {
+export const setCameraPermission = () => {
     return async (dispatch) => {
-        dispatch(cameraPermissionReducer.actions.setPermission(permission))
+        const { status } = await Camera.requestCameraPermissionsAsync()
+        dispatch(cameraPermissionReducer.actions.setPermission(status))
     }
 }
 
