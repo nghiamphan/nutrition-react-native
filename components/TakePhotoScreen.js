@@ -13,6 +13,7 @@ export default TakePhotoScreen = () => {
     )
     const cameraRef = useRef(null)
     const [photo, setPhoto] = useState(null)
+    const [resultShown, setResultShown] = useState(false)
 
     const isFocused = useIsFocused()
     const navigation = useNavigation()
@@ -26,6 +27,14 @@ export default TakePhotoScreen = () => {
     useEffect(() => {
         getCameraPermission()
     }, [])
+
+    useEffect(() => {
+        const dismissResultModal = navigation.addListener('focus', () => {
+            setResultShown(false)
+        })
+
+        dismissResultModal
+    }, [navigation])
 
     if (cameraPermission === null) {
         return (
@@ -75,6 +84,7 @@ export default TakePhotoScreen = () => {
     const submitPhoto = async () => {
         if (photo) {
             try {
+                setResultShown(true)
                 const response = await postPhoto(photo)
 
                 navigation.navigate('ResultModal', { product: response })
@@ -86,7 +96,7 @@ export default TakePhotoScreen = () => {
 
     return (
         <View style={{ flex: 1 }}>
-            {isFocused && <CameraView ref={cameraRef} style={styles.camera} />}
+            {(isFocused || resultShown) && <CameraView ref={cameraRef} style={styles.camera} />}
 
             <View style={styles.bottomContainer}>
                 <Image source={{ uri: photo ? photo.uri : null }} style={styles.previewImage} />
