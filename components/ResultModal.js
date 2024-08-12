@@ -291,10 +291,10 @@ const NutritionComponent = ({ name, value, thresholdList }) => {
 
     return (
         <View>
-            <View style={[styles.horizontalSpaceBetween, { marginBottom: 5 }]}>
+            <View style={[styles.horizontalSpaceBetween, { marginBottom: 2 }]}>
                 <Text variant="titleMedium">{name}</Text>
                 <Text variant="titleMedium" style={{ color: 'gray' }}>
-                    {value}
+                    {Number.isInteger(parseFloat(value)) ? value : parseFloat(value).toFixed(1)}
                 </Text>
             </View>
             <ColoredLine value={value} valuesToDisplay={thresholdList} colors={colors} />
@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginTop: 5,
+        marginTop: 10,
         marginEnd: 10,
     },
     image: {

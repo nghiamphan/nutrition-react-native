@@ -55,7 +55,9 @@ export default ColoredLine = ({ value, valuesToDisplay, colors }) => {
             <View style={{ flexDirection: 'row', left: -segmentLength / 2 }}>
                 {valuesToDisplay.map((val, index) => (
                     <View key={index} style={{ alignItems: 'center', width: segmentLength }}>
-                        <Text>{val}</Text>
+                        <Text variant="bodySmall" style={{ color: 'gray' }}>
+                            {val}
+                        </Text>
                     </View>
                 ))}
             </View>
