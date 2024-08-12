@@ -83,7 +83,7 @@ export default ScanScreen = () => {
 
     return (
         <View style={{ flex: 1 }}>
-            {isFocused && (
+            {(isFocused || scanned) && (
                 <CameraView
                     onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
                     barcodeScannerSettings={{
