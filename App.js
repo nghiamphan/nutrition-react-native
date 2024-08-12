@@ -1,11 +1,24 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { configureStore } from '@reduxjs/toolkit'
 import { StatusBar } from 'expo-status-bar'
 
+import { Provider } from 'react-redux'
 import ResultModal from './components/ResultModal'
 import ScanScreen from './components/ScanScreen'
 import TakePhotoScreen from './components/TakePhotoScreen'
+import navigationTabReducer, {
+    changeTab,
+    SCAN_SCREEN,
+    TAKE_PHOTO_SCREEN,
+} from './reducers/navigationTabReducer'
+
+const store = configureStore({
+    reducer: {
+        navigationTab: navigationTabReducer,
+    },
+})
 
 const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -19,12 +32,22 @@ const TabNavigator = () => {
                 options={{
                     title: 'Scan  Product Barcode',
                 }}
+                listeners={{
+                    tabPress: (e) => {
+                        store.dispatch(changeTab(SCAN_SCREEN))
+                    },
+                }}
             />
             <Tab.Screen
                 name="Photo"
                 component={TakePhotoScreen}
                 options={{
                     title: 'Take Label Photo',
+                }}
+                listeners={{
+                    tabPress: (e) => {
+                        store.dispatch(changeTab(TAKE_PHOTO_SCREEN))
+                    },
                 }}
             />
         </Tab.Navigator>
@@ -33,7 +56,7 @@ const TabNavigator = () => {
 
 export default App = () => {
     return (
-        <>
+        <Provider store={store}>
             <StatusBar style="auto" />
             <NavigationContainer>
                 <Stack.Navigator>
@@ -49,6 +72,6 @@ export default App = () => {
                     </Stack.Group>
                 </Stack.Navigator>
             </NavigationContainer>
-        </>
+        </Provider>
     )
 }

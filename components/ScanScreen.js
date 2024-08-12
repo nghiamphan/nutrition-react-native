@@ -1,19 +1,21 @@
-import { useIsFocused, useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import { Camera, CameraView } from 'expo-camera'
 import React, { useEffect, useState } from 'react'
 import { Alert, StyleSheet, View } from 'react-native'
 import { Button, Snackbar, Text } from 'react-native-paper'
+import { useSelector } from 'react-redux'
 
+import { SCAN_SCREEN } from '../reducers/navigationTabReducer'
 import { fetchProduct } from '../services/product'
 
 export default ScanScreen = () => {
+    const currentTab = useSelector((state) => state.navigationTab.currentTab)
     const [cameraPermission, setCameraPermission] = useState(null)
     const [cameraPermSnackbarVisible, setCameraPermSnackbarVisible] = useState(
         cameraPermission === 'denied'
     )
     const [scanned, setScanned] = useState(false)
 
-    const isFocused = useIsFocused()
     const navigation = useNavigation()
 
     const getCameraPermission = async () => {
@@ -83,7 +85,7 @@ export default ScanScreen = () => {
 
     return (
         <View style={{ flex: 1 }}>
-            {isFocused && (
+            {currentTab === SCAN_SCREEN && (
                 <CameraView
                     onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
                     barcodeScannerSettings={{

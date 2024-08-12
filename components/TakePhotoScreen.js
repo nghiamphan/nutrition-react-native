@@ -1,12 +1,15 @@
-import { useIsFocused, useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import { Camera, CameraView } from 'expo-camera'
 import React, { useEffect, useRef, useState } from 'react'
 import { Alert, Image, StyleSheet, View } from 'react-native'
 import { Button, IconButton, Snackbar, Text } from 'react-native-paper'
+import { useSelector } from 'react-redux'
 
+import { TAKE_PHOTO_SCREEN } from '../reducers/navigationTabReducer'
 import { postPhoto } from '../services/product'
 
 export default TakePhotoScreen = () => {
+    const currentTab = useSelector((state) => state.navigationTab.currentTab)
     const [cameraPermission, setCameraPermission] = useState(null)
     const [cameraPermSnackbarVisible, setCameraPermSnackbarVisible] = useState(
         cameraPermission === 'denied'
@@ -14,7 +17,6 @@ export default TakePhotoScreen = () => {
     const cameraRef = useRef(null)
     const [photo, setPhoto] = useState(null)
 
-    const isFocused = useIsFocused()
     const navigation = useNavigation()
 
     const getCameraPermission = async () => {
@@ -86,7 +88,7 @@ export default TakePhotoScreen = () => {
 
     return (
         <View style={{ flex: 1 }}>
-            {isFocused && <CameraView ref={cameraRef} style={styles.camera} />}
+            {currentTab === TAKE_PHOTO_SCREEN && <CameraView ref={cameraRef} style={styles.camera} />}
 
             <View style={styles.bottomContainer}>
                 <Image source={{ uri: photo ? photo.uri : null }} style={styles.previewImage} />
