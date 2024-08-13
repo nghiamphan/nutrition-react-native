@@ -10,6 +10,7 @@ import AskCameraPermission from './AskCameraPermission'
 
 export default TakePhotoScreen = () => {
     const cameraPermission = useSelector((state) => state.cameraPermission)
+    const nutritionProfile = useSelector((state) => state.nutritionProfile)
 
     const cameraRef = useRef(null)
 
@@ -46,7 +47,7 @@ export default TakePhotoScreen = () => {
         if (photo) {
             try {
                 setResultShown(true)
-                const response = await postPhoto(photo)
+                const response = await postPhoto(photo, nutritionProfile)
 
                 navigation.navigate('ResultModal', { product: response })
             } catch (error) {

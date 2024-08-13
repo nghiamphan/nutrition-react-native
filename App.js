@@ -5,14 +5,17 @@ import { configureStore } from '@reduxjs/toolkit'
 import { StatusBar } from 'expo-status-bar'
 import { Provider } from 'react-redux'
 
+import NutritionProfileScreen from './components/NutritionProfileScreen'
 import ResultModal from './components/ResultModal'
 import ScanScreen from './components/ScanScreen'
 import TakePhotoScreen from './components/TakePhotoScreen'
 import cameraPermissionReducer from './reducers/cameraPermissionReducer'
+import nutritionProfileReducer from './reducers/nutritionProfileReducer'
 
 const store = configureStore({
     reducer: {
         cameraPermission: cameraPermissionReducer,
+        nutritionProfile: nutritionProfileReducer,
     },
 })
 
@@ -21,7 +24,14 @@ const Tab = createBottomTabNavigator()
 
 const TabNavigator = () => {
     return (
-        <Tab.Navigator>
+        <Tab.Navigator initialRouteName="Scan">
+            <Tab.Screen
+                name="Profile"
+                component={NutritionProfileScreen}
+                options={{
+                    title: 'Preferences',
+                }}
+            />
             <Tab.Screen
                 name="Scan"
                 component={ScanScreen}

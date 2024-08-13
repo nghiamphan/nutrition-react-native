@@ -23,9 +23,10 @@ const fetchProduct = async (barcode, nutritionProfile) => {
  * Submit a photo to the server.
  *
  * @param {Object} photo - The photo to post.
+ * @param {Object} nutritionProfile - The nutrition profile of the product.
  * @returns {Promise<Object>} The response from the API.
  */
-const postPhoto = async (photo) => {
+const postPhoto = async (photo, nutritionProfile) => {
     const url = `${BASE_URL}image/`
 
     const formData = new FormData()
@@ -34,6 +35,8 @@ const postPhoto = async (photo) => {
         name: 'nutrition_label.jpg',
         type: 'image/jpeg',
     })
+
+    formData.append('nutritionProfile', JSON.stringify(nutritionProfile))
 
     const response = await axios.post(url, formData, {
         headers: {

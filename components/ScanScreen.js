@@ -10,6 +10,7 @@ import AskCameraPermission from './AskCameraPermission'
 
 export default ScanScreen = () => {
     const cameraPermission = useSelector((state) => state.cameraPermission)
+    const nutritionProfile = useSelector((state) => state.nutritionProfile)
 
     const [scanned, setScanned] = useState(false)
 
@@ -31,7 +32,7 @@ export default ScanScreen = () => {
     const handleBarCodeScanned = async ({ type, data }) => {
         try {
             setScanned(true)
-            response = await fetchProduct((barcode = data), {})
+            response = await fetchProduct((barcode = data), nutritionProfile)
 
             navigation.navigate('ResultModal', { product: response })
         } catch (error) {
