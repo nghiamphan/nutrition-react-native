@@ -1,3 +1,4 @@
+import { List } from '@ui-kitten/components'
 import { Image, ScrollView, StyleSheet, View } from 'react-native'
 import { Icon, Text } from 'react-native-paper'
 
@@ -214,7 +215,7 @@ export default ResultModal = ({ route }) => {
                 <Image source={{ uri: image ? image : null }} style={styles.image} resizeMode="contain" />
 
                 <View>
-                    <Text variant="headlineSmall" style={{ fontWeight: 'bold', width: '99%' }}>
+                    <Text variant="headlineSmall" style={{ fontWeight: 'bold', width: '75%' }}>
                         {name}
                     </Text>
                     <Text variant="labelLarge" style={{ color: 'gray', width: '99%' }}>
@@ -231,7 +232,7 @@ export default ResultModal = ({ route }) => {
             </View>
 
             <View style={{ margin: 20 }}>
-                {negativeComponentsToDisplay.length > 0 && (
+                {(additives.length > 0 || negativeComponentsToDisplay.length > 0) && (
                     <View style={styles.horizontalSpaceBetween}>
                         <Text variant="titleLarge" style={{ fontWeight: 'bold' }}>
                             Negatives
@@ -242,8 +243,7 @@ export default ResultModal = ({ route }) => {
                     </View>
                 )}
 
-                {/* <Text>Additives</Text>
-                <Text>{additives}</Text> */}
+                {additives.length > 0 && <Additives additives={additives} />}
 
                 <View>
                     {negativeComponentsToDisplay.map((component, index) => (
@@ -279,6 +279,48 @@ export default ResultModal = ({ route }) => {
                 </View>
             </View>
         </ScrollView>
+    )
+}
+
+/**
+ * @param {List[Object]} additives - List of additives which contains the e-number, name, type and risk level.
+ */
+const Additives = ({ additives }) => {
+    // Sort additives by risk level from high to low
+    const sortedAdditives = additives.sort((a, b) => b.risk - a.risk)
+
+    const capitalizeWords = (str) => {
+        return str
+            .split(' ')
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ')
+    }
+
+    return (
+        <View>
+            <Text variant="titleMedium">Additives</Text>
+            {sortedAdditives.map((additive, index) => (
+                <View key={index} style={styles.horizontalSpaceBetween}>
+                    <View>
+                        <Text variant="bodyMedium">{capitalizeWords(additive.name)}</Text>
+                        <Text variant="labelSmall" style={{ color: 'gray' }}>
+                            {capitalizeWords(additive.type)}
+                        </Text>
+                    </View>
+
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Text variant="labelMedium" style={{ color: 'gray', marginRight: 5 }}>
+                            {C.ADDITIVES_DESCRIPTORS[additive.risk]}
+                        </Text>
+                        <Icon
+                            source="checkbox-blank-circle"
+                            color={C.ADDITIVES_COLORS[additive.risk]}
+                            size={10}
+                        />
+                    </View>
+                </View>
+            ))}
+        </View>
     )
 }
 
