@@ -20,21 +20,29 @@ const fetchProduct = async (barcode, nutritionProfile) => {
 }
 
 /**
- * Submit a photo to the server.
+ * Submit 1 or 2 photos to the server.
  *
- * @param {Object} photo - The photo to post.
+ * @param {Array<Object>} photos - The list of photos to post.
  * @param {Object} nutritionProfile - The nutrition profile of the product.
  * @returns {Promise<Object>} The response from the API.
  */
-const postPhoto = async (photo, nutritionProfile) => {
+const postPhotos = async (photos, nutritionProfile) => {
     const url = `${BASE_URL}image/`
 
     const formData = new FormData()
-    formData.append('image', {
-        uri: photo.uri,
+    formData.append('images', {
+        uri: photos[0].uri,
         name: 'nutrition_label.jpg',
         type: 'image/jpeg',
     })
+
+    if (photos.length > 1) {
+        formData.append('images', {
+            uri: photos[1].uri,
+            name: 'ingredients.jpg',
+            type: 'image/jpeg',
+        })
+    }
 
     formData.append('nutritionProfile', JSON.stringify(nutritionProfile))
 
@@ -48,4 +56,4 @@ const postPhoto = async (photo, nutritionProfile) => {
     return data
 }
 
-export { fetchProduct, postPhoto }
+export { fetchProduct, postPhotos }

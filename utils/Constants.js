@@ -38,5 +38,7 @@ export const FRUIT_THRESHOLD = [40, 80, 100]
 export const PROTEIN_BEVERAGES_THRESHOLD = [0, 1.5, 3.0]
 export const FRUITS_BEVERAGES_THRESHOLD = [40, 80, 100]
 
+export const ADDITIVES_DESCRIPTORS = ['No risk', 'Low risk', 'Moderate risk', 'High risk']
+export const ADDITIVES_COLORS = ['green', 'yellow', 'orange', 'red'] // Colors for additives
 export const NEGATIVE_COLORS = ['green', 'lightgreen', 'orange', 'red'] // Colors for negative components
 export const POSITIVE_COLORS = ['lightgreen', 'green'] // Colors for positive components

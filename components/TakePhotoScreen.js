@@ -5,7 +5,7 @@ import { Alert, Image, StyleSheet, View } from 'react-native'
 import { Button, IconButton } from 'react-native-paper'
 import { useSelector } from 'react-redux'
 
-import { postPhoto } from '../services/product'
+import { postPhotos } from '../services/product'
 import AskCameraPermission from './AskCameraPermission'
 
 export default TakePhotoScreen = () => {
@@ -14,7 +14,7 @@ export default TakePhotoScreen = () => {
 
     const cameraRef = useRef(null)
 
-    const [photo, setPhoto] = useState(null)
+    const [photos, setPhotos] = useState([])
     const [resultShown, setResultShown] = useState(false)
 
     const isFocused = useIsFocused()
@@ -36,18 +36,18 @@ export default TakePhotoScreen = () => {
         if (cameraRef.current) {
             try {
                 const photoData = await cameraRef.current.takePictureAsync()
-                setPhoto(photoData)
+                setPhotos((prevPhotos) => [...prevPhotos.slice(-1), photoData])
             } catch (error) {
                 alert(error)
             }
         }
     }
 
-    const submitPhoto = async () => {
-        if (photo) {
+    const submitPhotos = async () => {
+        if (photos.length > 0) {
             try {
                 setResultShown(true)
-                const response = await postPhoto(photo, nutritionProfile)
+                const response = await postPhotos(photos, nutritionProfile)
 
                 navigation.navigate('ResultModal', { product: response })
             } catch (error) {
@@ -61,7 +61,10 @@ export default TakePhotoScreen = () => {
             {(isFocused || resultShown) && <CameraView ref={cameraRef} style={styles.camera} />}
 
             <View style={styles.bottomContainer}>
-                <Image source={{ uri: photo ? photo.uri : null }} style={styles.previewImage} />
+                <Image
+                    source={{ uri: photos.length > 0 ? photos[photos.length - 1].uri : null }}
+                    style={styles.previewImage}
+                />
 
                 <IconButton
                     icon="circle-outline"
@@ -72,8 +75,8 @@ export default TakePhotoScreen = () => {
 
                 <Button
                     mode="contained"
-                    onPress={submitPhoto}
-                    disabled={!photo}
+                    onPress={submitPhotos}
+                    disabled={photos.length === 0}
                     style={styles.submitButton}
                 >
                     Submit
